@@ -1,11 +1,13 @@
 const fs = require('fs');
 const { Client, Collection, Intents } = require('discord.js');
 const { token } = require('./config.json');
+const { DiscordTogether } = require('discord-together');
 const d = new Date;
 const date = d.toDateString() + ' ' + d.getHours() + ':' + d.getMinutes();
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
+client.discordTogether = new DiscordTogether(client);
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
@@ -15,6 +17,7 @@ for (const file of commandFiles) {
 
 client.once('ready', () => {
 	console.log('Ready!');
+	client.user.setPresence({ activities: [{ name: 'osu!' }], status: 'dnd' });
 });
 
 // never publish your tokens on github kids !
